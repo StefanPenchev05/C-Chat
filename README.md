@@ -71,7 +71,9 @@ The C-Chat project is motivated by the desire to showcase a diverse set of techn
     - **User Interface**: Provides a command-line interface for interacti
   
 
-
+## Software Design
+1. **Database** - Users, Messages, Files, Groups, Group_Members, Groups_Messages 
+   
 ```mermaid
 erDiagram
     USERS {
@@ -124,7 +126,114 @@ erDiagram
     USERS ||--o{ GROUP_MESSAGES : sends
     GROUPS ||--o{ GROUP_MESSAGES : receives
   ```
+2. **Server-Cleint Connection**
 
+```mermaid
+graph TD;
+    S[Server]
+    S_Init[Main Thread\nSocket Init\nAccept Clients]
+    S_CT1[Client Thread 1\nHandle Messages]
+    S_CT2[Client Thread 2\nHandle Messages]
+    S_DB[(Database)]
+    
+    C1[Client 1]
+    C1_Init[Main Thread\nSocket Init\nUser Input]
+    C1_LT1[Listener Thread 1\nReceive & Display]
+    C1_FH1[File Handler 1\nSend & Receive]
+    
+    C2[Client 2]
+    C2_Init[Main Thread\nSocket Init\nUser Input]
+    C2_LT2[Listener Thread 2\nReceive & Display]
+    C2_FH2[File Handler 2\nSend & Receive]
+    
+    S --> S_Init
+    S_Init --> S_CT1
+    S_Init --> S_CT2
+    S_CT1 --> S_DB
+    S_CT2 --> S_DB
+    
+    C1 --> C1_Init
+    C1_Init --> C1_LT1
+    C1_Init --> C1_FH1
+    
+    C2 --> C2_Init
+    C2_Init --> C2_LT2
+    C2_Init --> C2_FH2
+    
+    C1 -->|Connects To| S
+    S -->|Responds To| C1
+    C2 -->|Connects To| S
+    S -->|Responds To| C2
+```
+
+3. ***Class Diagram***
+
+```mermaid
+classDiagram
+    class Server {
+        +int socket
+        +int port
+        +Client[] clients
+        +void socketInit()
+        +void acceptClients()
+        +void handleMessages()
+    }
+
+    class Client {
+        +int socket
+        +char username
+        +void socketInit()
+        +void connectToServer()
+        +void sendMessage()
+        +void receiveMessage()
+        +void sendFile()
+        +void receiveFile()
+    }
+
+    class User {
+        +int userID
+        +char username
+        +char passwordHash
+        +char email
+        +time_t createdAt
+    }
+
+    class Message {
+        +int messageID
+        +int senderID
+        +int receiverID
+        +char content
+        +time_t timestamp
+        +bool isEncrypted
+    }
+
+    class File {
+        +int fileID
+        +int senderID
+        +int receiverID
+        +char fileName
+        +char filePath
+        +time_t timestamp
+    }
+
+    class Group {
+        +int groupID
+        +char groupName
+        +time_t createdAt
+        +User[] members
+        +void addMember(User user)
+        +void removeMember(User user)
+        +void sendMessage(Message message)
+    }
+
+    Server "1" -- "*" Client : serves
+    User "1" -- "*" Message : sends
+    User "1" -- "*" File : sends
+    User "1" -- "*" Group : belongs to
+    Group "1" -- "*" User : has members
+    Group "1" -- "*" Message : receives
+    User "1" -- "*" Message : sends
+```
 
 ## Documentation
 
