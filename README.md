@@ -69,6 +69,62 @@ The C-Chat project is motivated by the desire to showcase a diverse set of techn
     - **User Interaction**: Sends user messages to the server and displays messages received from the server.
     - **File Handling**: Sends and receives files to and from the server.
     - **User Interface**: Provides a command-line interface for interacti
+  
+
+
+```mermaid
+erDiagram
+    USERS {
+        int user_id PK
+        string username
+        string password_hash
+        string email
+        datetime created_at
+    }
+    MESSAGES {
+        int message_id PK
+        int sender_id FK
+        int receiver_id FK
+        string content
+        datetime timestamp
+        boolean is_encrypted
+    }
+    FILES {
+        int file_id PK
+        int sender_id FK
+        int receiver_id FK
+        string file_name
+        string file_path
+        datetime timestamp
+    }
+    GROUPS {
+        int group_id PK
+        string group_name
+        datetime created_at
+    }
+    GROUP_MEMBERS {
+        int user_id FK
+        int group_id FK
+    }
+    GROUP_MESSAGES {
+        int group_message_id PK
+        int group_id FK
+        int sender_id FK
+        string content
+        datetime timestamp
+        boolean is_encrypted
+    }
+
+    USERS ||--o{ MESSAGES : sends
+    USERS ||--o{ MESSAGES : receives
+    USERS ||--o{ FILES : sends
+    USERS ||--o{ FILES : receives
+    USERS ||--o{ GROUP_MEMBERS : belongs_to
+    GROUPS ||--o{ GROUP_MEMBERS : has
+    USERS ||--o{ GROUP_MESSAGES : sends
+    GROUPS ||--o{ GROUP_MESSAGES : receives
+  ```
+
 
 ## Documentation
 
