@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <signal.h>
 #include <fcntl.h>
+#include "color_log.h"
 
 volatile sig_atomic_t stop_flag = 0;
 
@@ -17,7 +18,7 @@ void server_socketInit(Server *server, int port)
     server->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server->socket == -1)
     {
-        fprintf(stderr, "Failed to create socket\n");
+        LOG_ERROR("Failed to create socket\n");
         exit(EXIT_FAILURE);
     }
 
@@ -29,19 +30,19 @@ void server_socketInit(Server *server, int port)
 
     if (bind(server->socket, (struct sockaddr *)&server->address, sizeof address) == -1)
     {
-        fprintf(stderr, "Failed to bind socket\n");
+        LOG_ERROR("Failed to bind socket\n");
         close(server->socket);
         exit(EXIT_FAILURE);
     }
 
     if (listen(server->socket, 20) == -1)
     {
-        fprintf(stderr, "Failed to listen on socket\n");
+        LOG_ERROR("Failed to listen on socket\n");
         close(server->socket);
         exit(EXIT_FAILURE);
     }
 
-    printf("Server is listening on port %d\n", port);
+    LOG_INFO("Server is listening on port %d\n", port);
 }
 
 void acceptClients(Server *server)

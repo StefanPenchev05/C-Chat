@@ -6,6 +6,7 @@
 
 #include "server.h"
 #include "client.h"
+#include "color_log.h"
 
 void serverInit(int port);
 void clientInit(int port);
@@ -14,7 +15,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 3)
     {
-        fprintf(stderr, "Usage: %s <server|client> <port>\n", argv[0]);
+        LOG_ERROR("Usage: %s <server|client> <port>", argv[0]);
         exit(EXIT_FAILURE);
     }
 
