@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "mysql.h": "c",
+        "server.h": "c",
+        "socket.h": "c",
+        "client.h": "c",
+        "stdlib.h": "c",
+        "inet.h": "c",
+        "pthread.h": "c"
+    }
+}
