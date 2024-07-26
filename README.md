@@ -173,6 +173,7 @@ classDiagram
     class Server {
         +int socket
         +int port
+        +int client_count
         +Client[] clients
         +void socketInit()
         +void acceptClients()
@@ -224,6 +225,7 @@ classDiagram
         +void addMember(User user)
         +void removeMember(User user)
         +void sendMessage(Message message)
+        +Group createGroup(int groupId, const char *groupName)
     }
 
     Server "1" -- "*" Client : serves
