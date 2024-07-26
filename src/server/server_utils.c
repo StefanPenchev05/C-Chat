@@ -34,7 +34,7 @@ void shutdown_server(Server *server)
 {
     LOG_WARN("Shutting down server...");
 
-    for (size_t i = 0; i < server->client_count; i++)
+    for (int i = 0; i < server->client_count; i++)
     {
         close(server->clients[i].socket);
     }
@@ -56,7 +56,7 @@ void restart_server(Server *server)
 
 void kickClient(Server *server, const char *username)
 {
-    for (size_t i = 0; i < server->client_count; i++)
+    for (int i = 0; i < server->client_count; i++)
     {
         if (strcmp(username, server->clients[i].username) == -1)
         {

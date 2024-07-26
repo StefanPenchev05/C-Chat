@@ -12,5 +12,6 @@ typedef struct
     time_t created_at;
 } User;
  
+ void createUser(const char *username, const char *password, const char *email);
 
 #endif

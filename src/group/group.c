@@ -1,4 +1,4 @@
-#include "../../include/group.h"
+#include "group.h"
 #include <stdlib.h>
 #include <string.h>
 

@@ -1,3 +1,4 @@
+#include "dbSql.h"
 #include "server.h"
 #include "color_log.h"
 #include "server_utils.h"
@@ -10,6 +11,18 @@
 
 void server_socketInit(Server *server, int port)
 {
+
+    init_db();
+    MYSQL *conn = connect_db();
+
+    if (conn == NULL)
+    {
+        LOG_ERROR("Failed to connect to database\n");
+        exit(EXIT_FAILURE);
+    }
+
+    LOG_INFO("Connected to the Database\n");
+
     server->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server->socket == -1)
     {
@@ -99,9 +112,4 @@ void acceptClients(Server *server)
     }
 
     shutdown_server(server);
-}
-
-void handleMessages(Server *server)
-{
-    
 }

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Source the .env file
+if [ -f .env ]; then
+	export $(cat .env | xargs)
+else
+	echo ".env file not found!"
+	exit 1
+fi
+
 # Variables
 CC=gcc
 CFLAGS="-Wall -Wextra -Iinclude -I/opt/homebrew/opt/mysql-client/include"
@@ -11,8 +19,9 @@ BIN=bin
 LIBS="-lmysqlclient"
 
 # Source files
-SERVER_FILES="$SRC/main.c $SERVER_SRC/server_utils.c $SERVER_SRC/server_network.c $SERVER_SRC/server_commands.c"
-GROUP_FILES="$GROUPS_SRC/group.c"  # Add any group-related source files here
+SERVER_FILES="$SRC/main.c $SERVER_SRC/server_utils.c $SERVER_SRC/server_network.c $SERVER_SRC/server_commands.c $SRC/db.c"
+GROUP_FILES="$GROUPS_SRC/group.c"
+
 
 # Create bin directory if it doesn't exist
 mkdir -p $BIN

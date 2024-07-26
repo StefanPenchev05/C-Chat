@@ -12,6 +12,7 @@
         "color_log.h": "c",
         "ctype.h": "c",
         "signal.h": "c",
-        "group.h": "c"
+        "group.h": "c",
+        "db.h": "c"
     }
 }
