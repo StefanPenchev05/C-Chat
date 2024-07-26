@@ -19,4 +19,6 @@ void addMemder(User user);
 void removeMember(User user);
 void sentMessage(Message message);
 
+Group createGroup(int groupId, const char *groupName);
+
 #endif // GROUP_H

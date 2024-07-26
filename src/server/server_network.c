@@ -100,3 +100,8 @@ void acceptClients(Server *server)
 
     shutdown_server(server);
 }
+
+void handleMessages(Server *server)
+{
+    
+}
