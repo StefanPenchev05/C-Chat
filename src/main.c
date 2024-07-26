@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "server.h"
+#include "client.h"
 #include "color_log.h"
 
 void serverInit(int port);

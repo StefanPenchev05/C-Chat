@@ -56,6 +56,12 @@ void restart_server(Server *server)
 
 void kickClient(Server *server, const char *username)
 {
+    if(server->client_count == 0)
+    {
+        LOG_WARN("No clients connected at the moment");
+        return;
+    }
+
     for (int i = 0; i < server->client_count; i++)
     {
         if (strcmp(username, server->clients[i].username) == -1)
