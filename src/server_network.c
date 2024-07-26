@@ -1,5 +1,6 @@
 #include "server.h"
 #include "color_log.h"
+#include "server_utils.h"
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <fcntl.h>
@@ -97,9 +98,5 @@ void acceptClients(Server *server)
         }
     }
 
-    printf("Server is stopping ...\n");
-    for (int j = 0; j < i; j++)
-        close(server->clients[j].socket);
-
-    close(server->socket);
+    shutdown_server(server);
 }

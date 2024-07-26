@@ -9,6 +9,8 @@
         "inet.h": "c",
         "pthread.h": "c",
         "string.h": "c",
-        "color_log.h": "c"
+        "color_log.h": "c",
+        "ctype.h": "c",
+        "signal.h": "c"
     }
 }
