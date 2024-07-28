@@ -1,0 +1,35 @@
+# Ignore build directories
+/build/
+/bin/
+/lib/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+
+# Ignore object files and executables
+*.o
+*.a
+*.so
+*.exe
+
+# Ignore generated files
+*.log
+*.out
+*.d
+
+# Ignore editor and OS-specific files
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Ignore compiled dynamic libraries
+*.dll
+*.dylib
+
+# Ignore CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
