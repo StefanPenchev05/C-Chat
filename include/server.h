@@ -17,9 +17,9 @@ typedef struct
     int client_count;
 } Server;
 
-extern pthread_mutex_t server_ready_mutex;
-extern pthread_cond_t server_ready_con;
-extern int server_ready;
+extern pthread_mutex_t g_Server_ready_mutex;
+extern pthread_cond_t g_Server_ready_con;
+extern int g_Server_ready;
 
 void server_socketInit(Server *server, int port);
 void acceptClients(Server *server);

@@ -1,4 +1,4 @@
-#include "dbSql.h"
+#include "databaseMySQL.h"
 #include "server.h"
 #include "color_log.h"
 #include "server_utils.h"
@@ -11,11 +11,10 @@
 
 void server_socketInit(Server *server, int port)
 {
+    init_env();
+    MYSQL *dbConnection = connectToDatabase();
 
-    init_db();
-    MYSQL *conn = connect_db();
-
-    if (conn == NULL)
+    if (dbConnection == NULL)
     {
         LOG_ERROR("Failed to connect to database\n");
         exit(EXIT_FAILURE);
@@ -30,13 +29,13 @@ void server_socketInit(Server *server, int port)
         exit(EXIT_FAILURE);
     }
 
-    struct sockaddr_in address;
-    address.sin_family = AF_INET;
-    address.sin_port = htons(port);
-    address.sin_addr.s_addr = INADDR_ANY;
-    server->address = address;
+    struct sockaddr_in serverAddress;
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(port);
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
+    server->address = serverAddress;
 
-    if (bind(server->socket, (struct sockaddr *)&server->address, sizeof address) == -1)
+    if (bind(server->socket, (struct sockaddr *)&server->address, sizeof(serverAddress)) == -1)
     {
         LOG_ERROR("Failed to bind socket\n");
         close(server->socket);
@@ -52,17 +51,17 @@ void server_socketInit(Server *server, int port)
 
     LOG_INFO("Server is listening on port %d\n", port);
 
-    pthread_mutex_lock(&server_ready_mutex);
-    server_ready = 1;
-    pthread_cond_signal(&server_ready_con);
-    pthread_mutex_unlock(&server_ready_mutex);
+    pthread_mutex_lock(&g_Server_ready_mutex);
+    g_Server_ready = 1;
+    pthread_cond_signal(&g_Server_ready_con);
+    pthread_mutex_unlock(&g_Server_ready_mutex);
 }
 
 void acceptClients(Server *server)
 {
-    socklen_t addr_len = sizeof(server->address);
-    int client_socket;
-    int i = 0;
+    socklen_t addressLength = sizeof(server->address);
+    int clientSocket;
+    int clientIndex = 0;
 
     fcntl(server->socket, F_SETFL, O_NONBLOCK);
 
@@ -87,8 +86,8 @@ void acceptClients(Server *server)
 
         if (activity > 0 && FD_ISSET(server->socket, &read_fds))
         {
-            client_socket = accept(server->socket, (struct sockaddr *)&server->address, &addr_len);
-            if (client_socket == -1)
+            clientSocket = accept(server->socket, (struct sockaddr *)&server->address, &addressLength);
+            if (clientSocket == -1)
             {
                 if (stop_flag)
                     break;
@@ -96,17 +95,17 @@ void acceptClients(Server *server)
                 continue;
             }
 
-            if (i < MAX_CLIENTS)
+            if (clientIndex < MAX_CLIENTS)
             {
-                server->clients[i].socket = client_socket;
+                server->clients[clientIndex].socket = clientSocket;
                 server->client_count++;
                 printf("Accepted new client connection\n");
-                i++;
+                clientIndex++;
             }
             else
             {
                 fprintf(stderr, "Max clients reached, rejecting new connection\n");
-                close(client_socket);
+                close(clientSocket);
             }
         }
     }

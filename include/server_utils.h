@@ -5,9 +5,9 @@
 #include <pthread.h>
 #include <signal.h>
 
-extern pthread_mutex_t server_ready_mutex;
-extern pthread_cond_t server_ready_con;
-extern int server_ready;
+extern pthread_mutex_t g_Server_ready_mutex;
+extern pthread_cond_t g_Server_ready_con;
+extern int g_Server_ready;
 extern volatile sig_atomic_t stop_flag;
 
 void serverInit(int port);

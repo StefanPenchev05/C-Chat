@@ -14,12 +14,12 @@ void handle_stop_signal()
 
 void *read_input(void *arg)
 {
-    pthread_mutex_lock(&server_ready_mutex);
-    while (!server_ready)
+    pthread_mutex_lock(&g_Server_ready_mutex);
+    while (!g_Server_ready)
     {
-        pthread_cond_wait(&server_ready_con, &server_ready_mutex);
+        pthread_cond_wait(&g_Server_ready_con, &g_Server_ready_mutex);
     }
-    pthread_mutex_unlock(&server_ready_mutex);
+    pthread_mutex_unlock(&g_Server_ready_mutex);
 
     Server *server = (Server *)arg;
     char *command = NULL;

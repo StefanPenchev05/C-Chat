@@ -13,6 +13,7 @@
         "ctype.h": "c",
         "signal.h": "c",
         "group.h": "c",
-        "db.h": "c"
+        "db.h": "c",
+        "databasemysql.h": "c"
     }
 }
